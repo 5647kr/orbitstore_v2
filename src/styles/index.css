@@ -1,0 +1,49 @@
+@import "./tailwind.css";
+
+:root {
+  --main: #18243d;
+  --main-dark: #0e172b;
+  --accent: #a97a3e;
+  --bg: #fff;
+  --bg-sub: #f5f4f1;
+  --text: #20242b;
+  --mute: #6d727a;
+  --border: #d8d6d0;
+  --success: #527a61;
+  --error: #a64a4a;
+}
+
+html {
+  color: var(--text);
+  background: var(--bg);
+  letter-spacing: -2.5%;
+  font-family: "Noto sans KR";
+  box-sizing: border-box;
+}
+
+input {
+  border: 1px solid var(--border);
+}
+
+input:focus {
+  outline: none;
+}
+
+button {
+  cursor: pointer;
+}
+
+svg {
+  stroke-width: 1px;
+}
+
+.a11y-hidden {
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(50%);
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+}

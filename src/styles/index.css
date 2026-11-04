@@ -21,10 +21,6 @@ html {
   box-sizing: border-box;
 }
 
-input {
-  border: 1px solid var(--border);
-}
-
 input:focus {
   outline: none;
 }
@@ -35,6 +31,7 @@ button {
 
 svg {
   stroke-width: 1px;
+  stroke-color: var(--text);
 }
 
 .a11y-hidden {

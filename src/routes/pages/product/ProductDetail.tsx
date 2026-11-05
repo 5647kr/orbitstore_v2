@@ -2,12 +2,26 @@ import { useParams } from "react-router";
 import { useProductQuery } from "../../../hook/useProductQuery";
 import ProductDetailSkeleton from "../../../components/product/ProductDetailSkeleton";
 import { useState } from "react";
-import { Minus, Plus, Telescope, X } from "lucide-react";
+import { Minus, Plus, Star, Telescope, X } from "lucide-react";
 import Wrap from "../../../components/common/Wrap";
 
 export default function ProductDetail() {
   const { id } = useParams();
-  // const navigate = useNavigate();
+  const suitability = [
+    { id: "moon", title: "달" },
+    { id: "planet", title: "행성" },
+    { id: "deepSKy", title: "딥스카이" },
+    { id: "astrophotography", title: "천체사진" },
+  ];
+
+  const baseSpec = [
+    { id: "aperture", title: "구경" },
+    { id: "focalLength", title: "초점거리" },
+    { id: "apertureRatio", title: "초점비" },
+    { id: "weight", title: "무게" },
+    { id: "goto", title: "GoTo" },
+    { id: "portability", title: "휴대성" },
+  ];
 
   const { data: item, isLoading } = useProductQuery({ id });
 
@@ -29,6 +43,57 @@ export default function ProductDetail() {
   const handleDecreaseBuyAmount = () => {
     if (buyAmount <= 1) return;
     setBuyAmount((prev) => prev - 1);
+  };
+
+  const recommendTxt = (recommended: string) => {
+    switch (recommended) {
+      case "입문자":
+        return "망원경이 처음인 입문자";
+      case "초보자":
+        return "망원경이 어색한 초보자";
+      case "숙련자":
+        return "망원경이 익숙한 숙련자";
+      case "전문가":
+        return "망원경이 일상인 전문가";
+      default:
+        return "망원경이 처음인 입문자";
+    }
+  };
+
+  const baseSpecTxt = (spec: string) => {
+    switch (spec) {
+      case "aperture":
+        return `${item.aperture}mm`;
+
+      case "focalLength":
+        return `${item.focalLength}mm`;
+
+      case "apertureRatio":
+        return `f/${item.apertureRatio}`;
+
+      case "weight":
+        return `${(item.weight.tubeWeight + item.weight.mountWeight).toFixed(2)}kg`;
+
+      case "goto":
+        return `${item.goto}`;
+
+      case "portability":
+        return (
+          <div className="flex items-center">
+            {Array.from({ length: item.portability }).map((_, index) => (
+              <Star
+                key={index}
+                fill="var(--accent)"
+                stroke="var(--accent)"
+                size={18}
+              />
+            ))}
+          </div>
+        );
+
+      default:
+        return "-";
+    }
   };
 
   if (isLoading) return <ProductDetailSkeleton />;
@@ -58,8 +123,11 @@ export default function ProductDetail() {
             <div className="w-full">
               {/* 기본 정보 */}
               <div>
-                <h2 className="font-bold text-xl">{item.title}</h2>
-                <h3 className="font-black text-(--accent) text-2xl">
+                <p className="text-sm text-(--mute)">
+                  {item.brand} · {item.category}
+                </p>
+                <h2 className="font-bold text-xl mt-5">{item.title}</h2>
+                <h3 className="font-black text-(--accent) text-2xl mt-5">
                   {item.price.toLocaleString("ko-KR")}원
                 </h3>
                 <p className="text-(--mute) text-sm">배송비 3,000원</p>
@@ -67,35 +135,37 @@ export default function ProductDetail() {
               {/* 간단 스펙 */}
               <div className="mt-5">
                 <ul className="grid grid-cols-3 gap-2">
-                  <li className="bg-(--bg-sub) py-2 text-center">
-                    <p className="font-semibold">{item.aperture}mm</p>
-                    <span className="text-sm text-(--mute)">구경</span>
-                  </li>
-                  <li className="bg-(--bg-sub) py-2 text-center">
-                    <p className="font-semibold">{item.focalLength}mm</p>
-                    <span className="text-sm text-(--mute)">초점거리</span>
-                  </li>
-                  <li className="bg-(--bg-sub) py-2 text-center">
-                    <p className="font-semibold">{item.apertureRatio}mm</p>
-                    <span className="text-sm text-(--mute)">초점비</span>
-                  </li>
-                  <li className="bg-(--bg-sub) py-2 text-center">
-                    <p className="font-semibold">
-                      {(item.tubeWeight + item.mountWeight).toFixed(2)}kg
-                    </p>
-                    <span className="text-sm text-(--mute)">무게</span>
-                  </li>
-                  <li className="bg-(--bg-sub) py-2 text-center">
-                    <p className="font-semibold">{item.goto}</p>
-                    <span className="text-sm text-(--mute)">GoTo</span>
-                  </li>
-                  <li className="bg-(--bg-sub) py-2 text-center">휴대성</li>
+                  {baseSpec.map((spec) => (
+                    <li className="bg-(--bg-sub) py-2 flex flex-col items-center justify-between gap-2.5">
+                      <p className="font-semibold">{baseSpecTxt(spec.id)}</p>
+                      <span className="text-sm text-(--mute)">
+                        {spec.title}
+                      </span>
+                    </li>
+                  ))}
                 </ul>
               </div>
 
               {/* 관측 적합도 */}
-              <div className="border border-(--border) bg-(--bg-sub) my-5">
-                <h4>관측 적합도</h4>
+              <div className="bg-(--bg-sub) my-5 py-5 px-2.5">
+                <h4 className="text-lg font-bold">관측 적합도</h4>
+                <ul className="my-5 flex flex-col gap-2.5">
+                  {suitability.map((suit) => (
+                    <li key={suit.id} className="flex items-center gap-5">
+                      <p className="text-sm w-25 text-(--mute)">{suit.title}</p>
+                      <div
+                        className="w-full bg-(--bg) h-2 relative before:block before:h-2 before:bg-(--accent) before:w-(--bar-width)"
+                        style={
+                          {
+                            "--bar-width": `${(item.suitability[suit.id] / 5) * 100}%`,
+                          } as React.CSSProperties
+                        }
+                      />
+                      <strong>{item.suitability[suit.id]}/5</strong>
+                    </li>
+                  ))}
+                </ul>
+                <p>이런 분께 추천 · {recommendTxt(item.recommended)}</p>
               </div>
 
               {/* 수량, 구매, 장바구니, 찜하기, 비교하기 */}
@@ -103,7 +173,7 @@ export default function ProductDetail() {
                 {/* 수량 조작 및 가격 */}
                 <div className="flex items-center justify-between">
                   {/* 수량 조작 */}
-                  <div className="border border-(--border) w-fit flex items-center gap-2">
+                  <div className="border border-(--border) w-25 flex items-center gap-2">
                     <button
                       type="button"
                       className="p-1"
@@ -111,7 +181,9 @@ export default function ProductDetail() {
                       disabled={buyAmount <= 1}>
                       <Minus size={16} />
                     </button>
-                    <span className="text-base p-1">{buyAmount}</span>
+                    <span className="text-base p-1 flex-1 flex justify-center items-center">
+                      {buyAmount}
+                    </span>
                     <button
                       type="button"
                       className="p-1"
@@ -202,24 +274,14 @@ export default function ProductDetail() {
             <div>
               <h5 className="text-2xl font-bold">상품 정보</h5>
               <ul className="flex flex-col gap-5 md:flex-row mt-5">
-                <li className="bg-(--bg-sub) border border-(--border) px-2.5 py-5 flex-1">
-                  <h6 className="font-black text-lg mb-1">쉬운 설치</h6>
-                  <p className="text-sm text-(--mute)">
-                    공구 없이 10분 안에 조립할 수 있어 첫 관측까지 빠릅니다.
-                  </p>
-                </li>
-                <li className="bg-(--bg-sub) border border-(--border) px-2.5 py-5 flex-1">
-                  <h6 className="font-black text-lg mb-1">선명한 시야</h6>
-                  <p className="text-sm text-(--mute)">
-                    달과 행성을 또렷하게 관측합니다.
-                  </p>
-                </li>
-                <li className="bg-(--bg-sub) border border-(--border) px-2.5 py-5 flex-1">
-                  <h6 className="font-black text-lg mb-1">선명한 시야</h6>
-                  <p className="text-sm text-(--mute)">
-                    삼각대, 한글 설명서, 설치 영상이 포함됩니다.
-                  </p>
-                </li>
+                {item.desc_jsonb.map(
+                  (desc: { title: string; content: string }) => (
+                    <li className="bg-(--bg-sub) border border-(--border) px-2.5 py-5 flex-1">
+                      <h6 className="font-black text-lg mb-1">{desc.title}</h6>
+                      <p className="text-sm text-(--mute)">{desc.content}</p>
+                    </li>
+                  ),
+                )}
               </ul>
             </div>
 
@@ -276,7 +338,12 @@ export default function ProductDetail() {
               </li>
               <li className="flex items-center border-b border-(--border) p-2">
                 <span className="text-(--mute) w-25">무게</span>
-                <p>{(item.tubeWeight + item.mountWeight).toFixed(2)} kg</p>
+                <p>
+                  {(item.weight.tubeWeight + item.weight.mountWeight).toFixed(
+                    2,
+                  )}
+                  kg
+                </p>
               </li>
               <li className="flex items-center border-b border-(--border) p-2">
                 <span className="text-(--mute) w-25">GoTo</span>
@@ -316,7 +383,9 @@ export default function ProductDetail() {
                 className={`border p-2 ${item.amount === 0 ? "border-(--mute) bg-(--mute) text-(--bg)" : "border-(--accent) bg-(--accent) text-(--bg)"}`}>
                 {item.amount === 0 ? "품절" : "바로 구매하기"}
               </button>
-              <button type="button" className="border border-(--border) p-2 ml-2">
+              <button
+                type="button"
+                className="border border-(--border) p-2 ml-2">
                 장바구니에 담기
               </button>
             </div>

@@ -140,7 +140,7 @@ export default function FilterAside({
               maxLength={9}
               value={customPrice.minPrice}
               onChange={handlePrice}
-              className="text-sm min-w-20 w-full p-1"
+              className="text-sm min-w-20 w-full p-1 border border-(--border)"
             />
             <span>~</span>
             <input
@@ -149,12 +149,12 @@ export default function FilterAside({
               maxLength={9}
               value={customPrice.maxPrice}
               onChange={handlePrice}
-              className="text-sm min-w-20 w-full p-1"
+              className="text-sm min-w-20 w-full p-1 border border-(--border)"
             />
             <button
               type="button"
               onClick={searchCustomPrice}
-              className="text-sm bg-(--accent) hover:bg-(--bg-sub) text-(--bg) w-full max-w-25 p-1 cursor-pointer">
+              className="text-sm bg-(--accent) text-(--bg) w-full max-w-25 p-1 cursor-pointer">
               검색
             </button>
           </div>

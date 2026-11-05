@@ -45,11 +45,9 @@ export default function Product() {
   };
 
   // 검색 submit 기능
-  const submitSearch = (e: React.SubmitEvent<HTMLFormElement>) => {
-    e.preventDefault();
-  };
-
-  console.log(error);
+  // const submitSearch = (e: React.SubmitEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+  // };
 
   return (
     <Wrap>
@@ -64,7 +62,7 @@ export default function Product() {
             <form>
               <input
                 type="text"
-                className="py-1 px-2  flex-1"
+                className="py-1 px-2 flex-1 border border-(--border)"
                 onChange={handleSearchInput}
                 value={searchInput}
                 placeholder="제품명 검색"

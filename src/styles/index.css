@@ -21,8 +21,10 @@ html {
   box-sizing: border-box;
 }
 
-input:focus {
-  outline: none;
+input:focus,
+select:focus,
+textarea:focus {
+  outline: transparent;
 }
 
 button {

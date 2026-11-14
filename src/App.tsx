@@ -5,6 +5,12 @@ import Product from "./routes/pages/product/Product";
 import ProductDetail from "./routes/pages/product/ProductDetail";
 import Login from "./routes/pages/auth/Login";
 import Register from "./routes/pages/auth/Register";
+import Support from "./routes/pages/support/Support";
+import Faq from "./routes/pages/support/Faq/Faq";
+import Inquiry from "./routes/pages/support/inquiry/Inquiry";
+import InquirySuccess from "./routes/pages/support/inquiry/InquirySuccess";
+import Guide from "./routes/pages/support/guide/Guide";
+import GuideSkeleton from "./components/support/GuideSkeleton";
 
 const router = createBrowserRouter([
   {
@@ -17,6 +23,18 @@ const router = createBrowserRouter([
 
       { path: "auth/login", Component: Login },
       { path: "auth/register", Component: Register },
+
+      {
+        path: "support",
+        Component: Support,
+      },
+      { path: "support/faq", Component: Faq },
+      { path: "support/inquiry", Component: Inquiry },
+      { path: "support/inquiry/success", Component: InquirySuccess },
+
+      // guide
+      { path: "support/guide/:id", Component: Guide },
+      { path: "support/guide/1", Component: GuideSkeleton },
     ],
   },
 ]);

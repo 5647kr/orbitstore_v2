@@ -1,5 +1,10 @@
 export function navigatePath(path: string) {
   switch (path) {
+    // event
+    case "/event":
+      return [{ path: "/event", title: "이벤트" }];
+
+    // support
     case "/support":
       return [{ path: "/support", title: "고객센터" }];
     case "/support/faq":

@@ -10,7 +10,8 @@ import Faq from "./routes/pages/support/Faq/Faq";
 import Inquiry from "./routes/pages/support/inquiry/Inquiry";
 import InquirySuccess from "./routes/pages/support/inquiry/InquirySuccess";
 import Guide from "./routes/pages/support/guide/Guide";
-import GuideSkeleton from "./components/support/GuideSkeleton";
+import Event from "./routes/pages/event/Event";
+import EventDetail from "./routes/pages/event/EventDetail";
 
 const router = createBrowserRouter([
   {
@@ -24,6 +25,9 @@ const router = createBrowserRouter([
       { path: "auth/login", Component: Login },
       { path: "auth/register", Component: Register },
 
+      { path: "event", Component: Event },
+      { path: "event/:id", Component: EventDetail },
+
       {
         path: "support",
         Component: Support,
@@ -31,10 +35,7 @@ const router = createBrowserRouter([
       { path: "support/faq", Component: Faq },
       { path: "support/inquiry", Component: Inquiry },
       { path: "support/inquiry/success", Component: InquirySuccess },
-
-      // guide
       { path: "support/guide/:id", Component: Guide },
-      { path: "support/guide/1", Component: GuideSkeleton },
     ],
   },
 ]);

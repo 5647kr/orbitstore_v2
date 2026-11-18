@@ -3,77 +3,68 @@ import supabase from "../../../supabase/supabase";
 interface FetchProductsProps {
   page: number;
   pageNum: number;
-  filterState: FilterState;
+  filterProducts: FilterProducts;
 }
 // 무한 스크롤용
 export async function fetchProducts({
   page,
   pageNum,
-  filterState,
+  filterProducts,
 }: FetchProductsProps) {
-  let url = supabase.from("products").select("*", { count: "exact" });
+  let url = supabase
+    .from("products")
+    .select(
+      "id, img, title, brand, category, aperture, focalLength, price, amount",
+      { count: "exact" },
+    );
 
   // 정렬
-  if (filterState.sort === "recent") {
+  if (filterProducts.sort === "recent") {
     url = url.order("created_at", { ascending: false });
-  } else if (filterState.sort === "highPrice") {
+  } else if (filterProducts.sort === "highPrice") {
     url = url.order("price", { ascending: false });
-  } else if (filterState.sort === "lowPrice") {
+  } else if (filterProducts.sort === "lowPrice") {
     url = url.order("price", { ascending: true });
-  } else if (filterState.sort === "popular") {
+  } else if (filterProducts.sort === "popular") {
     url = url.order("popular", { ascending: false });
   }
 
   // 카테고리
-  if (filterState.category.굴절망원경) {
+  if (filterProducts.category.굴절망원경) {
     url = url.eq("category", "굴절망원경");
-  } else if (filterState.category.반사망원경) {
+  } else if (filterProducts.category.반사망원경) {
     url = url.eq("category", "반사망원경");
-  } else if (filterState.category.돕소니안) {
+  } else if (filterProducts.category.돕소니안) {
     url = url.eq("category", "돕소니안");
   }
 
   // 브랜드
-  if (filterState.brand.celestron) {
+  if (filterProducts.brand.celestron) {
     url = url.eq("brand", "celestron");
-  } else if (filterState.brand.orion) {
+  } else if (filterProducts.brand.orion) {
     url = url.eq("brand", "orion");
-  } else if (filterState.brand["sky-watcher"]) {
+  } else if (filterProducts.brand["sky-watcher"]) {
     url = url.eq("brand", "sky-watcher");
-  } else if (filterState.brand.omegon) {
+  } else if (filterProducts.brand.omegon) {
     url = url.eq("brand", "omegon");
   }
 
   // 가격
-  if (filterState.price !== "") {
-    const min = filterState.price.split("~")[0];
-    const max = filterState.price.split("~")[1];
-    if (min !== "" && max === "") {
-      url = url.gt("price", min);
-    } else if (min !== "" && max !== "") {
-      url = url.gt("price", min).lt("price", max);
-    } else if (min === "" && max !== "") {
-      url = url.lt("price", max);
-    }
+  if (filterProducts.price) {
+    const price = parseInt(filterProducts.price) * 10000;
+    url = url.lt("price", price);
   }
 
   // 구경
-  if (filterState.aperture !== "") {
-    const min = filterState.aperture.split("~")[0];
-    const max = filterState.aperture.split("~")[1];
-    if (min !== "" && max === "") {
-      url = url.gt("aperture", min);
-    } else if (min !== "" && max !== "") {
-      url = url.gt("aperture", min).lt("aperture", max);
-    } else if (min === "" && max !== "") {
-      url = url.lt("aperture", max);
-    }
+  if (filterProducts.aperture) {
+    const aperture = parseInt(filterProducts.aperture);
+    url = url.lt("aperture", aperture);
   }
 
   // 옵션
-  if (filterState.option.support) {
+  if (filterProducts.option.support) {
     url = url.neq("goto", "지원 안함");
-  } else if (filterState.option.haveStuck) {
+  } else if (filterProducts.option.haveStuck) {
     url = url.gt("amount", 0);
   }
 
@@ -98,7 +89,7 @@ export async function fetchProduct({
 }: {
   id?: string;
   search?: string;
-}) {
+}): Promise<Product> {
   let url = supabase.from("products").select("*");
 
   if (id) {
@@ -117,3 +108,15 @@ export async function fetchProduct({
 }
 
 // 수량 업데이트
+
+// 제품 faq
+export async function fetchProductFaq() {
+  const { data, error } = await supabase
+    .from("faqs")
+    .select("*")
+    .eq("category", "제품문의");
+
+  if (error) throw error;
+
+  return data;
+}

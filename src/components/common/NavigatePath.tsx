@@ -1,8 +1,17 @@
 import { Link } from "react-router";
 import { navigatePath } from "../../lib/navigatePath";
 
-export default function NavigatePath({ path }: { path: string }) {
-  const navigate = navigatePath(path);
+export default function NavigatePath({
+  path,
+  dynamic,
+}: {
+  path: string;
+  dynamic?: string;
+}) {
+  const navigate = navigatePath(path, dynamic);
+
+  console.log(path)
+  console.log(navigate)
   return (
     <nav>
       <ul className="flex items-center">

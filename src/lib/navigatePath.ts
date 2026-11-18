@@ -1,5 +1,14 @@
-export function navigatePath(path: string) {
+export function navigatePath(path: string, dynamic?: string) {
   switch (path) {
+    // product
+    case "/product":
+      return [{ path: "/product", title: "망원경" }];
+    case "/product/":
+      return [
+        { path: "/product", title: "망원경" },
+        { path, title: dynamic ?? "제품 상세" },
+      ];
+
     // event
     case "/event":
       return [{ path: "/event", title: "이벤트" }];

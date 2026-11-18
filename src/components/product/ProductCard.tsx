@@ -1,14 +1,7 @@
-import { Copy, Heart, Telescope } from "lucide-react";
+import { Heart, ShoppingCartPlus, Telescope } from "lucide-react";
 import { memo } from "react";
 
-const ProductCard = memo(function ProductCard({ item }: { item: Product }) {
-  const addCompare = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    console.log("비교함 저장");
-  };
-
+const ProductCard = memo(function ProductCard({ item }: { item: Products }) {
   const addWish = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
@@ -16,96 +9,85 @@ const ProductCard = memo(function ProductCard({ item }: { item: Product }) {
     console.log("찜목록 저장");
   };
 
+  const addCart = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    console.log("찜목록 저장");
+  };
+
   return (
-    <div className="border border-(--border) min-h-125 flex flex-col relative">
-      <div className="bg-(--bg-sub) flex justify-center items-center p-5">
-        <img src={item.img} alt={item.title} className="w-60 object-cover" />
-      </div>
-      <div className="p-5 flex-1 flex flex-col justify-between">
-        {/* 카테고리 */}
-        <div className="text-(--mute) text-sm flex items-center gap-1">
-          <span>{item.brand}</span>
-          <span>{item.category}</span>
-        </div>
-
-        {/* 제품명, 가격 */}
-        <div className="mt-3">
-          <h2 className="text-base">{item.title}</h2>
-          <h3 className="text-(--accent) text-2xl font-bold">
-            {item.price.toLocaleString("ko-KR")}원
-          </h3>
-        </div>
-
-        {/* 간단한 제품 설명 */}
-        <div className="flex items-center gap-1 text-sm text-(--mute) mt-5">
-          <p>구경 {item.aperture}mm</p>
-          <p> · 초점거리 {item.focalLength}mm</p>
-          <p> · 초점비 f/{item.apertureRatio}</p>
-        </div>
-
-        {/* 비교, 찜 버튼 */}
-        <div className="mt-auto flex items-center gap-1">
-          <button
-            type="button"
-            onClick={addCompare}
-            className="group border border-(--border) p-1 flex-1 flex justify-center items-center gap-1 hover:border-(--main-dark) transition-all duration-500">
-            <Copy size={18} className="group-hover:stroke-(--main-dark)" />
-            비교하기
-          </button>
-          <button
-            type="button"
-            onClick={addWish}
-            className="group border border-(--border) p-1 flex-1 flex justify-center items-center gap-1 hover:border-(--error) transition-all duration-500">
-            <Heart size={18} className="group-hover:stroke-(--error)" />
-            <span>찜하기</span>
-          </button>
-        </div>
+    <div className="group">
+      {/* 이미지 */}
+      <div className="bg-(--bg-sub) rounded-md p-5 relative overflow-hidden">
+        <img
+          src={item.img}
+          alt={item.title}
+          className="w-full object-cover aspect-square group-hover:scale-110 duration-500"
+        />
+        <button
+          type="button"
+          className="bg-(--bg) p-3 rounded-full absolute top-5 left-5"
+          onClick={addWish}>
+          <Heart />
+        </button>
+        <button
+          type="button"
+          className="block md:hidden bg-(--bg) p-3 rounded-full absolute top-5 right-5"
+          onClick={addCart}>
+          <ShoppingCartPlus />
+        </button>
+        <button
+          type="button"
+          className="hidden md:block bg-(--main) w-[calc(100%-40px)] rounded-md absolute translate-y-10 text-(--bg) py-2 group-hover:-translate-y-10 duration-500"
+          onClick={addCart}>
+          장바구니 담기
+        </button>
       </div>
 
-      {/* 품절 표시 */}
-      {item.amount === 0 && (
-        <div className="absolute w-full h-full bg-[rgba(0,0,0,0.75)] flex justify-center items-center">
-          <strong className="text-(--error) text-xl py-1 px-4 border-2 border-(--error) rotate-24">
-            품절
-          </strong>
-        </div>
-      )}
+      {/* 기본 정보 */}
+      <div className="py-4 border-b border-(--border) px-2">
+        <span className="text-sm text-(--accent) font-bold">{item.brand}</span>
+        <h3 className="font-bold mt-3">{item.title}</h3>
+
+        <ul className="flex items-center gap-4 mt-1">
+          <li className="text-sm text-(--mute)">구경 {item.aperture}mm</li>
+          <li className="text-sm text-(--mute)">
+            초점거리 {item.focalLength}mm
+          </li>
+        </ul>
+
+        <strong className="block text-xl mt-4">
+          {item.price.toLocaleString("ko-KR")}원
+        </strong>
+      </div>
     </div>
   );
 });
 
 const ProductSkeleton = function ProductSkeleton() {
   return (
-    <div className="border border-(--border) min-h-125 flex flex-col">
-      <div className="bg-(--bg-sub) flex justify-center items-center p-5">
-        <Telescope size={240} className="text-(--accent)" />
+    <div className="group">
+      {/* 이미지 */}
+      <div className="bg-(--bg-sub) rounded-md p-5 relative overflow-hidden">
+        <Telescope className="w-full h-auto text-(--accent)" />
+        <div className="bg-(--bg) p-3 rounded-full absolute top-5 left-5">
+          <Heart />
+        </div>
+        <div className="block md:hidden bg-(--bg) p-3 rounded-full absolute top-5 right-5">
+          <ShoppingCartPlus />
+        </div>
       </div>
-      <div className="p-5 flex-1 flex flex-col justify-between">
-        {/* 카테고리 */}
-        <div className="w-32 h-5 bg-(--border) animate-pulse" />
 
-        {/* 제품명, 가격 */}
-        <div className="mt-3">
-          <div className="w-34 h-5.5 bg-(--border) animate-pulse" />
-          <div className="w-32 h-[28.5px] mt-px bg-(--border) animate-pulse" />
-        </div>
+      {/* 기본 정보 */}
+      <div className="py-4 border-b border-(--border) px-2">
+        <div className="rounded-md bg-(--border) w-20 h-4 animate-pulse" />
 
-        {/* 간단한 제품 설명 */}
-        <div className="mt-5">
-          <div className="w-50 h-5 bg-(--border) animate-pulse" />
-        </div>
+        <div className="rounded-md bg-(--border) w-60 h-6 animate-pulse mt-3" />
 
-        {/* 비교, 찜 버튼 */}
-        <div className="mt-auto flex items-center gap-1">
-          <div className="group border border-(--border) p-1 flex-1 flex justify-center items-center gap-1 hover:border-(--main-dark) transition-all duration-500">
-            <Copy size={18} className="group-hover:stroke-(--main-dark)" />
-            비교하기
-          </div>
-          <div className="group border border-(--border) p-1 flex-1 flex justify-center items-center gap-1 hover:border-(--error) transition-all duration-500">
-            <Heart size={18} className="group-hover:stroke-(--error)" />
-            <span>찜하기</span>
-          </div>
-        </div>
+        <div className="rounded-md bg-(--border) w-45 h-5 animate-pulse mt-1" />
+
+        <div className="rounded-md bg-(--border) w-30 h-7 animate-pulse mt-4" />
       </div>
     </div>
   );

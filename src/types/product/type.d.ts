@@ -3,7 +3,7 @@ interface FilterItemProps {
   title: string;
 }
 
-interface FilterState {
+interface FilterProducts {
   sort: "recent" | "highPrice" | "lowPrice" | "popular";
   price: string;
   aperture: string;
@@ -24,21 +24,29 @@ interface FilterState {
   };
 }
 
-interface Product {
+interface Products {
   id: string;
-  created_at: string;
   title: string;
   aperture: number;
-  apertureRatio: string;
   focalLength: string;
-  tubeWeight: number;
-  mountWeight: number;
-  goto: string;
   price: number;
   category: string;
   brand: string;
   amount: number;
   img: string;
+}
+
+interface Product extends Products {
+  created_at: string;
+  apertureRatio: string;
+  tubeWeight: number;
+  mountWeight: number;
+  goto: string;
   desc: string;
   popular: number;
+  portability: number;
+  suitability: { id: string; title: string; value: number }[];
+  recommended: string;
+  desc_jsonb: { title: string; content: string }[];
+  weight: { tubeWeight: number; mountWeight: number };
 }

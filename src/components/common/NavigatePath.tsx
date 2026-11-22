@@ -9,9 +9,6 @@ export default function NavigatePath({
   dynamic?: string;
 }) {
   const navigate = navigatePath(path, dynamic);
-
-  console.log(path)
-  console.log(navigate)
   return (
     <nav>
       <ul className="flex items-center">

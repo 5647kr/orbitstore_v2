@@ -12,6 +12,7 @@ import InquirySuccess from "./routes/pages/support/inquiry/InquirySuccess";
 import Guide from "./routes/pages/support/guide/Guide";
 import Event from "./routes/pages/event/Event";
 import EventDetail from "./routes/pages/event/EventDetail";
+import Compare from "./routes/pages/compare/Compare";
 
 const router = createBrowserRouter([
   {
@@ -19,15 +20,23 @@ const router = createBrowserRouter([
     Component: Default,
     children: [
       { path: "", Component: Home },
+
+      // 망원경 페이지
       { path: "product", Component: Product },
       { path: "product/:id", Component: ProductDetail },
 
+      // 비교 페이지
+      { path: "compare", Component: Compare },
+
+      // auth 페이지
       { path: "auth/login", Component: Login },
       { path: "auth/register", Component: Register },
 
+      // 이벤트 페이지
       { path: "event", Component: Event },
       { path: "event/:id", Component: EventDetail },
 
+      // 고객센터 페이지
       {
         path: "support",
         Component: Support,

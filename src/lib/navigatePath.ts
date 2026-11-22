@@ -9,6 +9,10 @@ export function navigatePath(path: string, dynamic?: string) {
         { path, title: dynamic ?? "제품 상세" },
       ];
 
+    // compare
+    case "/compare":
+      return [{ path: "/compare", title: "제품 비교" }];
+
     // event
     case "/event":
       return [{ path: "/event", title: "이벤트" }];

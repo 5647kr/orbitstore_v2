@@ -7,6 +7,7 @@ import ProductDetailSkeleton from "../../../components/product/ProductDetailSkel
 import { Fragment, useState } from "react";
 import {
   ArrowRight,
+  Check,
   Download,
   Heart,
   Mail,
@@ -16,6 +17,7 @@ import {
 } from "lucide-react";
 import Wrap from "../../../components/common/Wrap";
 import ProductDetailIndex from "../../../components/product/ProductDetailIndex";
+import useCompareStore from "../../../store/useCompareStore";
 
 const wordGuide = [
   {
@@ -48,8 +50,12 @@ export default function ProductDetail() {
   const { id } = useParams();
   const [buyAmount, setBuyAmount] = useState(1);
 
+  // 데이터 조회
   const { data: product, isLoading } = useProductQuery({ id: id! });
   const { data: productFaq } = useProductFaqQuery();
+  // store 불러오기
+  const compareIds = useCompareStore((state) => state.compareIds);
+  const addCompareId = useCompareStore((state) => state.addCompareId);
 
   if (isLoading || !product || !productFaq) {
     return <ProductDetailSkeleton />;
@@ -122,7 +128,8 @@ export default function ProductDetail() {
     }
   };
 
-  //
+  // 비교함에 이미 저장되어 있는지 확인
+  const isCompared = compareIds.includes(product.id);
 
   return (
     <>
@@ -242,12 +249,14 @@ export default function ProductDetail() {
                 </button>
                 <button
                   type="button"
-                  className={`rounded-md border border-(--main) p-4 col-span-6 flex items-center text-left gap-4 hover:bg-(--main) hover:text-(--bg)`}>
+                  onClick={() => addCompareId(product.id)}
+                  className={`rounded-md border border-(--main) p-4 col-span-6 flex items-center text-left gap-4 hover:bg-(--main) hover:text-(--bg) ${isCompared ? "bg-(--main) text-(--bg)" : "bg-(--bg) text-(--text)"}`}>
                   <div className="pr-4">
-                    <Download />
+                    {isCompared ? <Check /> : <Download />}
                   </div>
                   <div className="flex-1">
-                    <p>비교하기</p>
+                    
+                    <p>{isCompared? "비교함에 담았습니다." : "비교함에 담기"}</p>
                     <span className="text-sm text-(--mute)">
                       다른 망원경과 주요 사양을 한눈에 비교해보세요
                     </span>
